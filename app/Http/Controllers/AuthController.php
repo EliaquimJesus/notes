@@ -22,9 +22,18 @@ class AuthController extends Controller
          */
 
         $request->validate(
+            // rules
             [
-                'text_username' => 'required',
-                'text_password' => 'required'
+                'text_username' => 'required|email',
+                'text_password' => 'required|min:6|max:16'
+            ],
+            // error message
+            [
+                'text_username.required' => 'O username é obrigatório',
+                'text_username.email'    => 'O username deve ser um email válido',
+                'text_password.required' => 'A password é obrigatória',
+                'text_password.min'      => 'A password deve ter pelo menos :min caracteres',
+                'text_password.max'      => 'A password deve ter no máximo :max caracteres'
             ]
             );
             
