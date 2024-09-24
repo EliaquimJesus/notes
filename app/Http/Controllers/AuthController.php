@@ -17,6 +17,17 @@ class AuthController extends Controller
 
     public function loginSubmit(Request $request): string
     {
+        /*
+         * Form validation
+         */
+
+        $request->validate(
+            [
+                'text_username' => 'required',
+                'text_password' => 'required'
+            ]
+            );
+            
         return $request->input('text_username') . '<br>' . $request->input('text_password');
     }
 
