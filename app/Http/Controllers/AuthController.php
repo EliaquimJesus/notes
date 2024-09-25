@@ -71,8 +71,11 @@ class AuthController extends Controller
         return 'LOGIN COM SUCESSO!';
     }
 
-    public function logout(): string
+    public function logout(): mixed 
     {
-        return 'logout';
+        // logout from the aplication
+        session()->forget('user');
+
+        return redirect()->to('/login');
     }
 }
