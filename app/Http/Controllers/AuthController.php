@@ -17,7 +17,7 @@ class AuthController extends Controller
        return  view('login');
     }
 
-    public function loginSubmit(Request $request)
+    public function loginSubmit(Request $request): string
     {
         /*
          * Form validation
@@ -44,8 +44,31 @@ class AuthController extends Controller
         $password = $request->input('text_password');
         
         // check if user exists
+        $user = User::where('username', $username)
+                      ->where('deleted_at', NULL)
+                      ->first();
         
-       
+        // check if user or password is correct 
+        if(!$user || !password_verify($password, $user->password)){
+            return redirect()
+                    ->back()
+                    ->withInput()
+                    ->with('loginError', 'Username ou password incorrectos.');
+        }
+
+        // update last login
+        $user->last_login = date('Y-m-d H:i:s');
+        $user->save();
+
+        // login user
+        session([
+            'user' => [
+                'id'       => $user->id,
+                'username' => $user->username
+            ]
+        ]);
+
+        return 'LOGIN COM SUCESSO!';
     }
 
     public function logout(): string
