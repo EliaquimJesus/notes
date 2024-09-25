@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class AuthController extends Controller
        return  view('login');
     }
 
-    public function loginSubmit(Request $request): string
+    public function loginSubmit(Request $request)
     {
         /*
          * Form validation
@@ -37,19 +38,14 @@ class AuthController extends Controller
                 'text_password.max'      => 'A password deve ter no máximo :max caracteres'
             ]
             );
-            
-        //return $request->input('text_username') . '<br>' . $request->input('text_password');
+           
+        // get user input
+        $username = $request->input('text_username');
+        $password = $request->input('text_password');
         
-        // test database connection
-        try{
-            DB::connection()->getPdo();
-            echo "Connection is OK!" . "<br>";
-        } catch (\PDOException $e){
-            echo 'Connection faild:' . $e->getMessage() . "<br>";
-        }finally{
-            return "FIM!";
-        }
-
+        // check if user exists
+        
+       
     }
 
     public function logout(): string
