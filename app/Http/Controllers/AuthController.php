@@ -43,9 +43,7 @@ class AuthController extends Controller
         $password = $request->input('text_password');
         
         // check if user exists
-        $user = User::where('username', $username)
-                      ->where('deleted_at', NULL)
-                      ->first();
+        $user = User::where('username', $username)->where('deleted_at', NULL)->first();
         
         // check if user or password is correct 
         if(!$user || !password_verify($password, $user->password)){

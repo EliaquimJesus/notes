@@ -11,7 +11,7 @@ class MainController extends Controller
         return 'APP HOME READY....';
     }
 
-    public function newNote():string
+    public function newNote(): string
     {
         return 'APP NEW NOTE CREATE!';
     }
