@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -17,7 +16,7 @@ class AuthController extends Controller
        return  view('login');
     }
 
-    public function loginSubmit(Request $request): string
+    public function loginSubmit(Request $request): mixed
     {
         /*
          * Form validation
@@ -50,10 +49,7 @@ class AuthController extends Controller
         
         // check if user or password is correct 
         if(!$user || !password_verify($password, $user->password)){
-            return redirect()
-                    ->back()
-                    ->withInput()
-                    ->with('loginError', 'Username ou password incorrectos.');
+            return redirect()->back()->withInput()->with('loginError', 'Username ou password incorrectos.');
         }
 
         // update last login
