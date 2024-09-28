@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\View;
+
 class MainController extends Controller
 {
-    public function index(): string
+    public function index(): View
     {
-        return 'APP HOME READY....';
+        // load user´s notes
+
+        // show home view
+        return view('home');
     }
 
     public function newNote(): string

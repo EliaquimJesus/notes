@@ -62,7 +62,8 @@ class AuthController extends Controller
             ]
         ]);
 
-        return 'LOGIN COM SUCESSO!';
+        // redirect to home
+        return redirect()->to('/');
     }
 
     public function logout(): mixed 
