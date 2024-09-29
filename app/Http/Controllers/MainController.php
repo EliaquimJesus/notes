@@ -13,15 +13,10 @@ class MainController extends Controller
     {
         // load user´s notes
         $id = session('user.id');
-        $user = $user_x->find($id)->toArray();
         $notes = $user_x->find($id)->notes()->get()->toArray();
 
-        echo '<pre>';
-        print_r($user);
-        print_r($notes);
-
         // show home view
-        return view('home', $user);
+        return view('home', ['notes' => $notes]);
     }
 
     public function newNote(): string
