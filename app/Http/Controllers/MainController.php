@@ -5,54 +5,54 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Contracts\Encryption\DecryptException;
+use App\Services\Operations;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Crypt;
 
 class MainController extends Controller
 {
-    public function index(User $user_x): View
+    public function __construct(private User $user_x)
+    {
+        
+    }
+    
+    public function index(): View
     {
         // load user´s notes
         $id = session('user.id');
-        $notes = $user_x->find($id)->notes()->get()->toArray();
+        $notes = $this->user_x->find($id)->notes()->get()->toArray();
 
         // show home view
         return view('home', ['notes' => $notes]);
     }
 
-    public function newNote(): string
+    // create a new note
+    public function newNote(): View
     {
-        return 'APP NEW NOTE CREATE!';
+        // show new note view
+        return view('new_note');
     }
 
-    public function editNote($id): string
+    public function newNoteSubmit(Request $request)
     {
-        
-        $id = $this->decryptId($id);
+        return "I´m creatin a new note";
+    }
+
+    // edit a note
+    public function editNote(string $id): string 
+    {
+        $id = Operations::decryptId($id);
         
         return "I´m editing note with id = $id";
     }
 
-    public function deleteNote($id): string
+    // delete a note
+    public function deleteNote(string $id): string 
     {
-        $id = $this->decryptId($id);
+        $id = Operations::decryptId($id);
         
         return "I´m deleting note with id = $id";
     }
 
-    private function decryptId($id): mixed
-    {
-        // check if id is encrypyed
-        try {
-            //code...
-            $id = Crypt::decrypt($id);
-
-        } catch (DecryptException $e) {
-            //throw $th;
-            return redirect()->route('home');
-        }
-
-        return $id;
-    }
+    
 }

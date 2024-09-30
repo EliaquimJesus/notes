@@ -10,13 +10,17 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    public function __construct(private User $user_x)
+    {
+        
+    }
     //
     public function login(): View
     {
        return  view('login');
     }
 
-    public function loginSubmit(Request $request, User $user_x): mixed
+    public function loginSubmit(Request $request): mixed
     {
         /*
          * Form validation
@@ -43,7 +47,7 @@ class AuthController extends Controller
         $password = $request->input('text_password');
         
         // check if user exists
-        $user = $user_x::where('username', $username)->where('deleted_at', NULL)->first();
+        $user = $this->user_x::where('username', $username)->where('deleted_at', NULL)->first();
         
         // check if user or password is correct 
         if(!$user || !password_verify($password, $user->password)){
