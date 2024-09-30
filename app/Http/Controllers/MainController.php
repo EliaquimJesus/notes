@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\Note;
 use App\Models\User;
 use App\Services\Operations;
-use GuzzleHttp\Psr7\Request;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 
 class MainController extends Controller
 {
-    public function __construct(private User $user_x)
+    public function __construct(private User $user, private Note $note)
     {
         
     }
@@ -20,7 +21,7 @@ class MainController extends Controller
     {
         // load user´s notes
         $id = session('user.id');
-        $notes = $this->user_x->find($id)->notes()->get()->toArray();
+        $notes = $this->user->find($id)->notes()->get()->toArray();
 
         // show home view
         return view('home', ['notes' => $notes]);
@@ -33,9 +34,38 @@ class MainController extends Controller
         return view('new_note');
     }
 
-    public function newNoteSubmit(Request $request)
+    public function newNoteSubmit(Request $request): mixed
     {
-        return "I´m creatin a new note";
+        // validate request
+        $request->validate(
+            // rules
+            [
+                'text_title' => 'required|min:3|max:200',
+                'text_note'  => 'required|min:3|max:3000'
+            ],
+            // error message
+            [
+                'text_title.required'     => 'O titulo é obrigatório',
+                'text_title.min' => 'O titulo deve ter pelo menos :min caracteres',
+                'text_title.max' => 'O titulo deve ter no máximo :max caracteres',
+
+                'text_note.required'      => 'A nota é obrigatória',
+                'text_note.min'  => 'A nota deve ter pelo menos :min caracteres',
+                'text_note.max'  => 'A nota deve ter no máximo :max caracteres',
+            ]
+        );
+
+        // get user id
+        $id = session('user.id');
+
+        // create new note
+        $this->note->user_id  = $id;
+        $this->note->title    = $request->text_title;
+        $this->note->text     = $request->text_note;
+        $this->note->save();
+
+        // redirect to homepage
+        return redirect()->route('home');
     }
 
     // edit a note
