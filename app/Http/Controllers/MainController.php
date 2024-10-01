@@ -78,7 +78,7 @@ class MainController extends Controller
         return view('edit_note', ['note' => $note]);
     }
 
-    public function editNoteSubmit(Request $request)
+    public function editNoteSubmit(Request $request): mixed
     {
         // validate request
         $request->validate(
@@ -118,10 +118,10 @@ class MainController extends Controller
     }
 
     // delete a note
-    public function deleteNote(string $id): string
+    public function deleteNote(string $id): void
     {
         $id = Operations::decryptId($id);
 
-        return "I´m deleting note with id = $id";
+        echo "I´m deleting note with id = $id";
     }
 }
