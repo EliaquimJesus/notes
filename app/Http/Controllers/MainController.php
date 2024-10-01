@@ -57,8 +57,8 @@ class MainController extends Controller
 
         // create new note
         $this->note->user_id  = $id;
-        $this->note->title    = $request->text_title;
-        $this->note->text     = $request->text_note;
+        $this->note->title    = $request->get('text_title');
+        $this->note->text     = $request->get('text_note');
         $this->note->save();
 
         // redirect to homepage
@@ -118,10 +118,14 @@ class MainController extends Controller
     }
 
     // delete a note
-    public function deleteNote(string $id): void
+    public function deleteNote(string $id): View
     {
         $id = Operations::decryptId($id);
 
-        echo "I´m deleting note with id = $id";
+        // load the note
+        $note = $this->note::find($id);
+
+        // show delete confirmation
+        return view('delete_note', ['note' => $note]);
     }
 }
